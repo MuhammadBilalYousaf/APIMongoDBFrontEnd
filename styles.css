@@ -1,0 +1,22 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 20px;
+}
+
+#responseMessage {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.table th,
+.table td {
+    text-align: center;
+}
+
+.form-control:valid {
+    border-color: #28a745;
+}
+
+.form-control:invalid {
+    border-color: #dc3545;
+}
