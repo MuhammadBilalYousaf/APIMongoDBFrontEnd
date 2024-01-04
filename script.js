@@ -4,66 +4,73 @@ document.addEventListener('DOMContentLoaded', function () {
 
 let editingId = null;
 
+let dataFetched = false;
+
 async function getData() {
+    if (dataFetched) {
+        console.log('Data already fetched. Skipping...');
+        return;
+    }
+
     try {
-        const response = await fetch('https://ap-iwith-mongo-db.vercel.app/api/products');
+        const response = await fetch('https://restful-ap-iwith-mongo-db-i6rh.vercel.app/api/products');
         const data = await response.json();
 
         console.log('All data retrieved:', data);
         displayData(data);
+        dataFetched = true;
     } catch (error) {
         console.error('Error fetching data:', error);
     }
 }
 
-// function displayData(data) {
-//     const tableBody = document.querySelector('#dataTable tbody');
-//     tableBody.innerHTML = '';
-
-//     data.forEach(item => {
-//         const row = tableBody.insertRow();
-//         row.innerHTML = `<td>${item._id}</td><td>${item.title}</td><td>${item.price}</td>
-//             <td>
-//                 <button class="btn btn-warning btn-sm" onclick="editData('${item._id}')">Edit</button>
-//                 <button class="btn btn-danger btn-sm" onclick="deleteData('${item._id}')">Delete</button>
-//             </td>`;
-//     });
-// }
 
 function displayData(data) {
-    const cardContainer = document.querySelector('#cardContainer');
-    cardContainer.innerHTML = '';
+    const container = document.querySelector('.container');
+   // container.innerHTML = ''; // Clear existing content
 
-    data.forEach(item => {
-        const card = document.createElement('div');
-        card.classList.add('card', 'mb-3');
+    for (let i = 0; i < data.length; i += 4) {
+        const row = document.createElement('div');
+        row.classList.add('row');
 
-        card.innerHTML = `
-            <div class="card-body">
-                <h5 class="card-title">${item.title}</h5>
-                <p class="card-text">Price: $${item.price}</p>
+        for (let j = i; j < i + 4 && j < data.length; j++) {
+            const item = data[j];
+
+            const col = document.createElement('div');
+            col.classList.add('col-md-3', 'mb-4');
+
+            const card = document.createElement('div');
+            card.classList.add('card');
+
+            const cardBody = document.createElement('div');
+            cardBody.classList.add('card-body');
+
+            cardBody.innerHTML = `<h5 class="card-title">${item.title}</h5>
+                <p class="card-text">Price: ${item.price}</p>
                 <button class="btn btn-warning btn-sm" onclick="editData('${item._id}')">Edit</button>
-                <button class="btn btn-danger btn-sm" onclick="deleteData('${item._id}')">Delete</button>
-            </div>
-        `;
+                <button class="btn btn-danger btn-sm" onclick="deleteData('${item._id}')">Delete</button>`;
 
-        cardContainer.appendChild(card);
-    });
+            card.appendChild(cardBody);
+            col.appendChild(card);
+            row.appendChild(col);
+        }
+
+        container.appendChild(row);
+    }
 }
 
 
+
+
 async function editData(id) {
-    const response = await fetch(`https://ap-iwith-mongo-db.vercel.app/api/products/${id}`);
+    const response = await fetch(`https://restful-ap-iwith-mongo-db-i6rh.vercel.app/api/products/${id}`);
     const data = await response.json();
 
-    // Populate the modal fields
     document.getElementById('editTitleInput').value = data.title;
     document.getElementById('editPriceInput').value = data.price;
 
-    // Store the editing ID for saving changes
     editingId = id;
 
-    // Open the modal
     $('#editModal').modal('show');
 }
 
@@ -77,8 +84,7 @@ async function addData() {
     }
 
     if (editingId) {
-        // If editing, perform PUT request to update data
-        const response = await fetch(`https://ap-iwith-mongo-db.vercel.app/api/products/${editingId}`, {
+        const response = await fetch(`https://restful-ap-iwith-mongo-db-i6rh.vercel.app/api/products/${editingId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -88,12 +94,10 @@ async function addData() {
 
         handleResponse(response, 'Data updated successfully!', 'Failed to update data.');
 
-        // Reset editingId and close the modal after saving changes
         editingId = null;
         $('#editModal').modal('hide');
     } else {
-        // If not editing, perform POST request to add new data
-        const response = await fetch('https://ap-iwith-mongo-db.vercel.app/api/products', {
+        const response = await fetch('https://restful-ap-iwith-mongo-db-i6rh.vercel.app/api/products', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -104,7 +108,6 @@ async function addData() {
         handleResponse(response, 'Data added successfully!', 'Failed to add data.');
     }
 
-    // Clear form after adding or updating data
     clearForm();
 }
 
@@ -112,7 +115,7 @@ async function deleteData(id) {
     const confirmDelete = confirm('Are you sure you want to delete this record?');
 
     if (confirmDelete) {
-        const response = await fetch(`https://ap-iwith-mongo-db.vercel.app/api/products/${id}`, {
+        const response = await fetch(`https://restful-ap-iwith-mongo-db-i6rh.vercel.app/api/products/${id}`, {
             method: 'DELETE',
         });
 
@@ -127,7 +130,6 @@ function handleResponse(response, successMessage, errorMessage) {
         responseMessage.textContent = successMessage;
         responseMessage.style.color = 'green';
 
-        // Refresh data after successful operation
         getData();
     } else {
         responseMessage.textContent = errorMessage;
@@ -136,16 +138,12 @@ function handleResponse(response, successMessage, errorMessage) {
 }
 
 function clearForm() {
-    // Clear form fields
     document.getElementById('titleInput').value = '';
     document.getElementById('priceInput').value = '';
 
-    // Reset editingId and button text
     editingId = null;
 }
 function saveChanges() {
-    // Implement the logic to save changes in the edit modal
-    // You can reuse the logic from the addData function with some modifications
     const title = document.getElementById('editTitleInput').value;
     const price = document.getElementById('editPriceInput').value;
 
@@ -155,8 +153,7 @@ function saveChanges() {
     }
 
     if (editingId) {
-        // If editing, perform PUT request to update data
-        fetch(`https://ap-iwith-mongo-db.vercel.app/api/products/${editingId}`, {
+        fetch(`https://restful-ap-iwith-mongo-db-i6rh.vercel.app/api/products/${editingId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -172,9 +169,7 @@ function saveChanges() {
             .then(data => {
                 console.log('Data updated successfully:', data);
                 handleResponse(data, 'Data updated successfully!', null);
-                // Close the edit modal after saving changes
                 $('#editModal').modal('hide');
-                // Clear the editingId after successful update
                 editingId = null;
             })
             .catch(error => {

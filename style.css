@@ -1,0 +1,103 @@
+body {
+    font-family: 'Helvetica', sans-serif;
+    margin: 20px;
+    background-color: #f8f9fa;
+}
+
+.container {
+    margin-top: 50px;
+}
+
+h1 {
+    font-size: 2em;
+    color: #007bff;
+}
+
+.form-control {
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+
+.btn-primary {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.table {
+    margin-top: 20px;
+}
+
+.table th,
+.table td {
+    border: 1px solid #6c757d;
+    padding: 10px;
+    text-align: center;
+}
+
+#responseMessage {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.modal-content {
+    background-color: #fff;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+}
+
+.modal-header {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #007bff;
+}
+
+.close {
+    color: #007bff;
+    font-size: 1.5em;
+}
+
+#addDataForm {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.btn {
+    margin: 5px;
+}
+
+#inputFormContainer {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease;
+}
+
+#inputFormContainer:hover {
+    background-color: #f8f9fa;
+}
+
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
